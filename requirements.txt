@@ -1,0 +1,6 @@
+qdrant-client 
+langchain 
+langgraph
+
+SQLAlchemy
+alembic
