@@ -1,0 +1,1 @@
+"""Parse input queries for better outputs"""

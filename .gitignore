@@ -24,3 +24,8 @@ docker-compose.override.yml
 .vscode/
 .idea/
 *.swp
+
+#Parsed Pdfs 
+docs.txt
+docs.json
+output.md
