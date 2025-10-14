@@ -25,7 +25,8 @@ docker-compose.override.yml
 .idea/
 *.swp
 
-#Parsed Pdfs 
+#Parsed Pdfs/PDFs 
 docs.txt
 docs.json
 output.md
+*.pdf

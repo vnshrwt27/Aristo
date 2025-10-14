@@ -7,7 +7,7 @@ from typing import List, Dict, Optional, Any
 from pathlib import Path
 from dataclasses import dataclass, asdict
 
-from document_loader import ParsedDocument
+from document_loader import DocumentLoader
 from langchain.text_splitter import MarkdownHeaderTextSplitter,MarkdownTextSplitter
 
 #from core.vdb_client import client
@@ -15,6 +15,7 @@ import asyncio
 
 @dataclass
 class ChunkMetadata:
+    """Metadata for each chunks"""
     doc_id: str
     chunk_id: str
     source: str
@@ -30,7 +31,7 @@ class DocumentChunk:
     metadata: ChunkMetadata
     embedding: List[float]= None
 
-class DocumnentChunker:
+class DocumentChunker:
     """Handles document chunking"""
     def __init__(
             self,
@@ -38,10 +39,7 @@ class DocumnentChunker:
             chunk_overlap: int =200,
             chunking_strategy: str= 'markdown_headers'):
         """
-        Args:
-        chunk_size: Maximum size of each chunks(characters)
-        chunk_overlap: Overlap of chunks 
-        chunking_strategy: The startegy used for chunking the document 
+        Initialize the Chunker with chunk configurations 
         """
         self.chunk_size=chunk_size
         self.chunk_overlap=chunk_overlap
@@ -54,13 +52,6 @@ class DocumnentChunker:
                        ) -> List[DocumentChunk]:
         """
         Chunk a documnet into smaller chunks
-        Args:
-        content: content available in the document 
-        source: source filepath or identifier
-        doc_id : Optional Document ID 
-
-        Returns:
-        A list of DocumentChunk objects  
         """
         pass
 
