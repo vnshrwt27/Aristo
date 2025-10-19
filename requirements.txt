@@ -2,7 +2,4 @@ qdrant-client
 langchain 
 langgraph
 
-SQLAlchemy
-alembic
-
 docling

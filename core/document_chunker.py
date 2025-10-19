@@ -6,8 +6,8 @@ TODO: Add Postgres database as well later on
 from typing import List, Dict, Optional, Any
 from pathlib import Path
 from dataclasses import dataclass, asdict
+import uuid
 
-from document_loader import DocumentLoader
 from langchain.text_splitter import MarkdownHeaderTextSplitter,MarkdownTextSplitter
 
 #from core.vdb_client import client
@@ -23,6 +23,9 @@ class ChunkMetadata:
     total_chunks: int
     headers: Dict[str,str] = None
     created_at: float= None
+    def to_dict(self):
+        """Convert to dictionary for serialization"""
+        return {k: v for k, v in asdict(self).items() if v is not None}
 
 @dataclass
 class DocumentChunk:
@@ -44,27 +47,38 @@ class DocumentChunker:
         self.chunk_size=chunk_size
         self.chunk_overlap=chunk_overlap
         self.chunking_strategy=chunking_strategy
-    
+    def generate_chunk_id(self):
+        """Generate Unique chunk ids"""
+        return str(uuid.uuid4())
     def chunk_document(self,
                        content: str,
                        source: str,
-                       doc_id: Optional[str]
+                       doc_id: Optional[str],
                        ) -> List[DocumentChunk]:
         """
-        Chunk a documnet into smaller chunks
+        Chunk a document into smaller chunks
         """
-        pass
+        headers_to_split_on = [
+            ("##", "Header"),
+                ]
 
-with open("output.md","r") as f:
-    output=f.read()
-headers_to_split_on = [
-    ("#", "Header 1"),
-    ("##", "Header 2"),
-    ("###", "Header 3"),
-]
+        splitter=MarkdownHeaderTextSplitter(headers_to_split_on=headers_to_split_on)
+        chunks=splitter.split_text(content)
+        docs=[]
+        for chunk_idx, chunk_content in enumerate(chunks):
+            metadata=ChunkMetadata(
+                doc_id=doc_id,
+                chunk_id=self.generate_chunk_id(), 
+                source=source,
+                total_chunks=len(chunks),
+                chunk_index=chunk_idx,
+            )
+            docs.append(DocumentChunk(
+                                        content=chunk_content.page_content,
+                                        metadata=metadata,
+                                      ))
+        return docs
 
-splitter=MarkdownHeaderTextSplitter(headers_to_split_on=headers_to_split_on)
-
-documents=splitter.split_text(output)
-for i in range(0,5):
-    print(documents[i],"\n")
+if __name__=="__main__":
+    chunker=DocumentChunker()
+    print(chunker)

@@ -1,4 +1,4 @@
-"""Loads PDF files and concverts them into Documents using langchain for chunker"""
+"""Loads PDF files and converts them into Documents using langchain for chunker"""
 
 from typing import List, Dict, Optional, Any
 from pathlib import Path
@@ -26,21 +26,54 @@ class DocumentLoader:
     Smart document loader with configurable pipeline options
     Supports PDFs with picture descriptions and table extraction
     """
-    def __init__(self):
+    def __init__(self,
+                 format_options: Optional[Dict]= None,
+                 do_picture_description: bool= True,
+                 do_table_structure: bool= True,
+                 do_ocr: bool= True,
+                 generate_picture_images= True):
         """Initialize the Document Loader with cutom pipeline configurations"""
-        self.converter=DocumentConverter()
+        if format_options is None:
+            format_options={InputFormat.PDF: PdfFormatOption(
+                pipeline_options=PdfPipelineOptions(
+                    do_picture_description=do_picture_description,
+                    do_table_structure=do_table_structure,
+                    do_ocr=do_ocr,
+                    generate_picture_images=generate_picture_images,
+                    do_formula_enrichment=True)
+            )}
+        self.format_options=format_options
+        self.converter=DocumentConverter(format_options=format_options)
     
-    def generate_doc_id():
+    def generate_doc_id(self,filepath: str) -> str:
         """Generate unique doc_id for each file"""
-        pass
+        unique_string = f"{filepath}_{datetime.now().isoformat()}"
+        return hashlib.md5(unique_string.encode()).hexdigest()[:16]
     
-    def extract_images():
+    def extract_images(self, result: ConversionResult)-> List[Dict[str,Any]]:
         """Extract image information from the conversion result"""
-        pass
+        images=[]
+        try:
+            doc=result.document
+            for item in doc.pictures:
+                images.append(item)
+
+        except Exception as e:
+            print(f"Error extracting images from file:{e}")
     
-    def extract_tables():
+        return images
+    
+    def extract_tables(self, result:ConversionResult) ->List[Dict[str,Any]]:
         """Extract table information from the conversion result"""
-        pass
+        tables=[]
+        try:
+            doc=result.document
+            for table in doc.tables:
+                tables.append(table)
+        except Exception as e:
+            print(f"Error trying to extract tables:{e}")
+        return tables
+
     
     def convert_document(self,file_path) -> ParsedDocument:
         """Convert files to ParsedDocument"""
@@ -49,10 +82,10 @@ class DocumentLoader:
         content=result.document.export_to_markdown()
         
         return ParsedDocument(
-            doc_id="",
-            source="dummy",
-            images=[],
-            tables=[],
+            doc_id=self.generate_doc_id(filepath=file_path),
+            source=file_path,
+            images=self.extract_images(result),
+            tables=self.extract_tables(result),
             parsed_content=content
         )
     
