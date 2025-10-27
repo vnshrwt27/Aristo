@@ -11,4 +11,4 @@ squad = load_dataset("squad_v2")
 
 # 4. MS MARCO (Document ranking)
 #marco = load_dataset("ms_marco", "v2.1")
-print(squad['train'][0])
+print(squad['validation'][0])

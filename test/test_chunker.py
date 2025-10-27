@@ -7,7 +7,7 @@ async def main():
     with open("output.md","r") as f:
         text=f.read()
     chunker=DocumentChunker()
-    uploader=await QdrantUploader.create(client=client, collection_name="New")
+    uploader=await QdrantUploader.create(client=client, collection_name="New",vector_size=768)
 
 
 

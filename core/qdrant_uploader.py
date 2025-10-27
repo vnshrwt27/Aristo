@@ -12,8 +12,8 @@ from qdrant_client.models import (
     PointStruct,
     CollectionStatus
 )
-from document_chunker import DocumentChunker,DocumentChunk
-from embedding import model
+from core.document_chunker import DocumentChunker,DocumentChunk
+from core.embedding import model
 
 
 class QdrantUploader:
@@ -56,6 +56,7 @@ class QdrantUploader:
                     id=str(uuid.uuid4()),
                     vector=embedded_chunk,
                     payload= {"Chunk Index":chunk_idx,
+                              "content": chunk.content,
                               "metadata":chunk.metadata,
                               })
             )
