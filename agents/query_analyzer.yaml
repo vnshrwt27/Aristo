@@ -1,0 +1,46 @@
+agent:
+  id: query_analyzer
+  role: Query Analysis
+
+  description: >
+    Extracts intent and key signals from a user query
+    for routing and downstream processing.
+
+  input:
+    type: text
+
+  output:
+    type: json
+    schema:
+      intent: string
+      query_type: string
+      domain: string
+      entities:
+        - string
+      constraints:
+        - string
+
+  prompt:
+    system: |
+      You are a Query Analyzer.
+
+      Analyze the user query and extract:
+      - The main intent
+      - The query type
+      - The domain
+      - Any mentioned entities
+      - Any explicit constraints
+
+      Rules:
+      - Do NOT answer the query
+      - Do NOT add external knowledge
+      - Output ONLY valid JSON
+
+      Query types:
+      - informational
+      - instructional
+      - debugging
+      - analytical
+      - creative
+      - decision-making
+

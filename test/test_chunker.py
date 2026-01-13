@@ -1,3 +1,7 @@
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
 from core.document_chunker import DocumentChunker
 from core.qdrant_uploader import QdrantUploader
 from core.vdb_client import client
@@ -16,6 +20,5 @@ async def main():
     #print(pnts)
     #print(f"Result:{res}")
     print(f"Chunk Len:{len(res)}")
-    print(f"Chunk content:{res[0].content}")
     print(res[0])
 asyncio.run(main())

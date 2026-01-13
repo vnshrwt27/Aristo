@@ -14,7 +14,7 @@ from docling.datamodel.document import ConversionResult
 @dataclass
 class ParsedDocument: #Figure out how to store the documnet 
     """Structured representation of parsed document"""
-    doc_id: int
+    doc_id: str
     source: str
     images: List[Dict]
     tables: List[Dict]

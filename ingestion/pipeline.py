@@ -1,3 +1,5 @@
+"""Ingestion Pipeline for Aristo"""
+#TODO : Restructuring of this folder is needed 
 import asyncio 
 from pathlib import Path
 from typing import List,Optional

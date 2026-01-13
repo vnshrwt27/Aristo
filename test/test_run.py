@@ -1,3 +1,4 @@
+#TODO: Create a Run for the model from end to end (i mean parsing the documents into chunks)
 from docling.datamodel import vlm_model_specs
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import (

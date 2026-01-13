@@ -10,8 +10,6 @@ import uuid
 
 from langchain.text_splitter import MarkdownHeaderTextSplitter,MarkdownTextSplitter
 
-#from core.vdb_client import client
-import asyncio
 
 @dataclass
 class ChunkMetadata:

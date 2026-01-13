@@ -1,7 +1,11 @@
 """
 Production-ready RAG Evaluation Script
 """
+import os
+import sys
 
+# Add the parent directory (Aristo) to sys.path
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 import asyncio
 import logging
 from typing import List, Dict, Tuple
@@ -48,7 +52,7 @@ class RAGTester:
             (test_cases, context_mapping)
         """
         logger.info("Loading SQuAD v2 dataset...")
-        squad = load_dataset("squad_v2", split="validation")
+        squad = load_dataset("squad_v2", split="train")
         
         test_cases = []
         context_to_id = {}
@@ -76,8 +80,8 @@ class RAGTester:
                 'title': example.get('title', 'Unknown')
             })
         
-        logger.info(f"✓ Loaded {len(test_cases)} test cases")
-        logger.info(f"✓ Unique contexts: {len(context_to_id)}")
+        logger.info(f" Loaded {len(test_cases)} test cases")
+        logger.info(f" Unique contexts: {len(context_to_id)}")
         
         return test_cases, context_to_id
     
@@ -114,7 +118,7 @@ class RAGTester:
             
             chunks.append(chunk)
         
-        logger.info(f"✓ Created {len(chunks)} chunks")
+        logger.info(f"Created {len(chunks)} chunks")
         return chunks
     
     async def index_chunks(self, chunks: List[DocumentChunk], batch_size: int = 50):
@@ -132,12 +136,12 @@ class RAGTester:
             
             try:
                 await self.uploader.upload_chunks(batch)
-                logger.info(f"  ✓ Indexed {min(i + batch_size, len(chunks))}/{len(chunks)}")
+                logger.info(f" Indexed {min(i + batch_size, len(chunks))}/{len(chunks)}")
             except Exception as e:
-                logger.error(f"  ✗ Error indexing batch {i//batch_size + 1}: {e}")
+                logger.error(f" Error indexing batch {i//batch_size + 1}: {e}")
                 raise
         
-        logger.info("✓ All chunks indexed successfully")
+        logger.info("All chunks indexed successfully")
     
     async def search(self, query: str, k: int = 10) -> List[Dict]:
         """
@@ -264,7 +268,7 @@ class RAGTester:
             else:
                 case['rank'] = None
         
-        logger.info("✓ Evaluation complete")
+        logger.info("Evaluation complete")
         return test_cases
     
     def print_results(self, metrics: Dict):
@@ -298,7 +302,7 @@ class RAGTester:
         metrics_file = output_path / f"metrics_{timestamp}.json"
         with open(metrics_file, 'w') as f:
             json.dump(metrics, f, indent=2)
-        logger.info(f"✓ Metrics saved to {metrics_file}")
+        logger.info(f"Metrics saved to {metrics_file}")
         
     async def run_full_test(self, 
                            max_samples: int = 100,
@@ -326,7 +330,7 @@ class RAGTester:
             chunks = self.create_chunks(context_to_id)
             await self.index_chunks(chunks)
         else:
-            logger.warning("⚠ Skipping indexing - using existing collection")
+            logger.warning("Skipping indexing - using existing collection")
         
         # Run evaluation
         test_cases = await self.run_evaluation(test_cases, k=max(k_values))
