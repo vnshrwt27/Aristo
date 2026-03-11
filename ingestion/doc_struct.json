@@ -1,0 +1,919 @@
+[
+    {
+        "title": "Docling Technical Report",
+        "content": [],
+        "nodes": []
+    },
+    {
+        "title": "Version 1.0",
+        "content": [
+            "Christoph Auer Maksym Lysak Ahmed Nassar Michele Dolfi Nikolaos Livathinos Panos Vagenas Cesar Berrospi Ramis Matteo Omenetti Fabian Lindlbauer Kasper Dinkla Lokesh Mishra Yusik Kim Shubham Gupta Rafael Teixeira de Lima Valery Weber Lucas Morin Ingmar Meijer Viktor Kuropiatnyk Peter W. J. Staar",
+            "AI4K Group, IBM Research R\u00a8 uschlikon, Switzerland"
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/3",
+                "type": "text",
+                "text": "Christoph Auer Maksym Lysak Ahmed Nassar Michele Dolfi Nikolaos Livathinos Panos Vagenas Cesar Berrospi Ramis Matteo Omenetti Fabian Lindlbauer Kasper Dinkla Lokesh Mishra Yusik Kim Shubham Gupta Rafael Teixeira de Lima Valery Weber Lucas Morin Ingmar Meijer Viktor Kuropiatnyk Peter W. J. Staar",
+                "page": 1,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/4",
+                "type": "text",
+                "text": "AI4K Group, IBM Research R\u00a8 uschlikon, Switzerland",
+                "page": 1,
+                "children": [],
+                "level": 1
+            }
+        ]
+    },
+    {
+        "title": "Abstract",
+        "content": [
+            "This technical report introduces Docling , an easy to use, self-contained, MITlicensed open-source package for PDF document conversion. It is powered by state-of-the-art specialized AI models for layout analysis (DocLayNet) and table structure recognition (TableFormer), and runs efficiently on commodity hardware in a small resource budget. The code interface allows for easy extensibility and addition of new features and models."
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/6",
+                "type": "text",
+                "text": "This technical report introduces Docling , an easy to use, self-contained, MITlicensed open-source package for PDF document conversion. It is powered by state-of-the-art specialized AI models for layout analysis (DocLayNet) and table structure recognition (TableFormer), and runs efficiently on commodity hardware in a small resource budget. The code interface allows for easy extensibility and addition of new features and models.",
+                "page": 1,
+                "children": [],
+                "level": 1
+            }
+        ]
+    },
+    {
+        "title": "1 Introduction",
+        "content": [
+            "Converting PDF documents back into a machine-processable format has been a major challenge for decades due to their huge variability in formats, weak standardization and printing-optimized characteristic, which discards most structural features and metadata. With the advent of LLMs and popular application patterns such as retrieval-augmented generation (RAG), leveraging the rich content embedded in PDFs has become ever more relevant. In the past decade, several powerful document understanding solutions have emerged on the market, most of which are commercial software, cloud offerings [3] and most recently, multi-modal vision-language models. As of today, only a handful of open-source tools cover PDF conversion, leaving a significant feature and quality gap to proprietary solutions.",
+            "With Docling , we open-source a very capable and efficient document conversion tool which builds on the powerful, specialized AI models and datasets for layout analysis and table structure recognition we developed and presented in the recent past [12, 13, 9]. Docling is designed as a simple, self-contained python library with permissive license, running entirely locally on commodity hardware. Its code architecture allows for easy extensibility and addition of new features and models.",
+            "Here is what Docling delivers today:"
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/8",
+                "type": "text",
+                "text": "Converting PDF documents back into a machine-processable format has been a major challenge for decades due to their huge variability in formats, weak standardization and printing-optimized characteristic, which discards most structural features and metadata. With the advent of LLMs and popular application patterns such as retrieval-augmented generation (RAG), leveraging the rich content embedded in PDFs has become ever more relevant. In the past decade, several powerful document understanding solutions have emerged on the market, most of which are commercial software, cloud offerings [3] and most recently, multi-modal vision-language models. As of today, only a handful of open-source tools cover PDF conversion, leaving a significant feature and quality gap to proprietary solutions.",
+                "page": 1,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/9",
+                "type": "text",
+                "text": "With Docling , we open-source a very capable and efficient document conversion tool which builds on the powerful, specialized AI models and datasets for layout analysis and table structure recognition we developed and presented in the recent past [12, 13, 9]. Docling is designed as a simple, self-contained python library with permissive license, running entirely locally on commodity hardware. Its code architecture allows for easy extensibility and addition of new features and models.",
+                "page": 1,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/12",
+                "type": "text",
+                "text": "Here is what Docling delivers today:",
+                "page": 2,
+                "children": [
+                    {
+                        "id": "#/texts/13",
+                        "type": "list_item",
+                        "text": "Converts PDF documents to JSON or Markdown format, stable and lightning fast",
+                        "page": 2,
+                        "children": [],
+                        "level": 2
+                    },
+                    {
+                        "id": "#/texts/14",
+                        "type": "list_item",
+                        "text": "Understands detailed page layout, reading order, locates figures and recovers table structures",
+                        "page": 2,
+                        "children": [],
+                        "level": 2
+                    },
+                    {
+                        "id": "#/texts/15",
+                        "type": "list_item",
+                        "text": "Extracts metadata from the document, such as title, authors, references and language",
+                        "page": 2,
+                        "children": [],
+                        "level": 2
+                    },
+                    {
+                        "id": "#/texts/16",
+                        "type": "list_item",
+                        "text": "Optionally applies OCR, e.g. for scanned PDFs",
+                        "page": 2,
+                        "children": [],
+                        "level": 2
+                    },
+                    {
+                        "id": "#/texts/17",
+                        "type": "list_item",
+                        "text": "Can be configured to be optimal for batch-mode (i.e high throughput, low time-to-solution) or interactive mode (compromise on efficiency, low time-to-solution)",
+                        "page": 2,
+                        "children": [],
+                        "level": 2
+                    },
+                    {
+                        "id": "#/texts/18",
+                        "type": "list_item",
+                        "text": "Can leverage different accelerators (GPU, MPS, etc).",
+                        "page": 2,
+                        "children": [],
+                        "level": 2
+                    }
+                ],
+                "level": 1
+            }
+        ]
+    },
+    {
+        "title": "2 Getting Started",
+        "content": [
+            "To use Docling, you can simply install the docling package from PyPI. Documentation and examples are available in our GitHub repository at github.com/DS4SD/docling. All required model assets 1 are downloaded to a local huggingface datasets cache on first use, unless you choose to pre-install the model assets in advance.",
+            "Docling provides an easy code interface to convert PDF documents from file system, URLs or binary streams, and retrieve the output in either JSON or Markdown format. For convenience, separate methods are offered to convert single documents or batches of documents. A basic usage example is illustrated below. Further examples are available in the Doclign code repository.",
+            "from docling.document_converter import DocumentConverter",
+            "Optionally, you can configure custom pipeline features and runtime options, such as turning on or off features (e.g. OCR, table structure recognition), enforcing limits on the input document size, and defining the budget of CPU threads. Advanced usage examples and options are documented in the README file. Docling also provides a Dockerfile to demonstrate how to install and run it inside a container."
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/20",
+                "type": "text",
+                "text": "To use Docling, you can simply install the docling package from PyPI. Documentation and examples are available in our GitHub repository at github.com/DS4SD/docling. All required model assets 1 are downloaded to a local huggingface datasets cache on first use, unless you choose to pre-install the model assets in advance.",
+                "page": 2,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/21",
+                "type": "text",
+                "text": "Docling provides an easy code interface to convert PDF documents from file system, URLs or binary streams, and retrieve the output in either JSON or Markdown format. For convenience, separate methods are offered to convert single documents or batches of documents. A basic usage example is illustrated below. Further examples are available in the Doclign code repository.",
+                "page": 2,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/22",
+                "type": "text",
+                "text": "from docling.document_converter import DocumentConverter",
+                "page": 2,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/24",
+                "type": "text",
+                "text": "Optionally, you can configure custom pipeline features and runtime options, such as turning on or off features (e.g. OCR, table structure recognition), enforcing limits on the input document size, and defining the budget of CPU threads. Advanced usage examples and options are documented in the README file. Docling also provides a Dockerfile to demonstrate how to install and run it inside a container.",
+                "page": 2,
+                "children": [],
+                "level": 1
+            }
+        ]
+    },
+    {
+        "title": "3 Processing pipeline",
+        "content": [
+            "Docling implements a linear pipeline of operations, which execute sequentially on each given document (see Fig. 1). Each document is first parsed by a PDF backend, which retrieves the programmatic text tokens, consisting of string content and its coordinates on the page, and also renders a bitmap image of each page to support downstream operations. Then, the standard model pipeline applies a sequence of AI models independently on every page in the document to extract features and content, such as layout and table structures. Finally, the results from all pages are aggregated and passed through a post-processing stage, which augments metadata, detects the document language, infers reading-order and eventually assembles a typed document object which can be serialized to JSON or Markdown."
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/26",
+                "type": "text",
+                "text": "Docling implements a linear pipeline of operations, which execute sequentially on each given document (see Fig. 1). Each document is first parsed by a PDF backend, which retrieves the programmatic text tokens, consisting of string content and its coordinates on the page, and also renders a bitmap image of each page to support downstream operations. Then, the standard model pipeline applies a sequence of AI models independently on every page in the document to extract features and content, such as layout and table structures. Finally, the results from all pages are aggregated and passed through a post-processing stage, which augments metadata, detects the document language, infers reading-order and eventually assembles a typed document object which can be serialized to JSON or Markdown.",
+                "page": 2,
+                "children": [],
+                "level": 1
+            }
+        ]
+    },
+    {
+        "title": "3.1 PDF backends",
+        "content": [
+            "Two basic requirements to process PDF documents in our pipeline are a) to retrieve all text content and their geometric coordinates on each page and b) to render the visual representation of each page as it would appear in a PDF viewer. Both these requirements are encapsulated in Docling's PDF backend interface. While there are several open-source PDF parsing libraries available for python, we faced major obstacles with all of them for different reasons, among which were restrictive",
+            "licensing (e.g. pymupdf [7]), poor speed or unrecoverable quality issues, such as merged text cells across far-apart text tokens or table columns (pypdfium, PyPDF) [15, 14].",
+            "We therefore decided to provide multiple backend choices, and additionally open-source a custombuilt PDF parser, which is based on the low-level qpdf [4] library. It is made available in a separate package named docling-parse and powers the default PDF backend in Docling. As an alternative, we provide a PDF backend relying on pypdfium , which may be a safe backup choice in certain cases, e.g. if issues are seen with particular font encodings."
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/28",
+                "type": "text",
+                "text": "Two basic requirements to process PDF documents in our pipeline are a) to retrieve all text content and their geometric coordinates on each page and b) to render the visual representation of each page as it would appear in a PDF viewer. Both these requirements are encapsulated in Docling's PDF backend interface. While there are several open-source PDF parsing libraries available for python, we faced major obstacles with all of them for different reasons, among which were restrictive",
+                "page": 2,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/47",
+                "type": "text",
+                "text": "licensing (e.g. pymupdf [7]), poor speed or unrecoverable quality issues, such as merged text cells across far-apart text tokens or table columns (pypdfium, PyPDF) [15, 14].",
+                "page": 3,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/48",
+                "type": "text",
+                "text": "We therefore decided to provide multiple backend choices, and additionally open-source a custombuilt PDF parser, which is based on the low-level qpdf [4] library. It is made available in a separate package named docling-parse and powers the default PDF backend in Docling. As an alternative, we provide a PDF backend relying on pypdfium , which may be a safe backup choice in certain cases, e.g. if issues are seen with particular font encodings.",
+                "page": 3,
+                "children": [],
+                "level": 1
+            }
+        ]
+    },
+    {
+        "title": "3.2 AI models",
+        "content": [
+            "As part of Docling, we initially release two highly capable AI models to the open-source community, which have been developed and published recently by our team. The first model is a layout analysis model, an accurate object-detector for page elements [13]. The second model is TableFormer [12, 9], a state-of-the-art table structure recognition model. We provide the pre-trained weights (hosted on huggingface) and a separate package for the inference code as docling-ibm-models . Both models are also powering the open-access deepsearch-experience, our cloud-native service for knowledge exploration tasks."
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/50",
+                "type": "text",
+                "text": "As part of Docling, we initially release two highly capable AI models to the open-source community, which have been developed and published recently by our team. The first model is a layout analysis model, an accurate object-detector for page elements [13]. The second model is TableFormer [12, 9], a state-of-the-art table structure recognition model. We provide the pre-trained weights (hosted on huggingface) and a separate package for the inference code as docling-ibm-models . Both models are also powering the open-access deepsearch-experience, our cloud-native service for knowledge exploration tasks.",
+                "page": 3,
+                "children": [],
+                "level": 1
+            }
+        ]
+    },
+    {
+        "title": "Layout Analysis Model",
+        "content": [
+            "Our layout analysis model is an object-detector which predicts the bounding-boxes and classes of various elements on the image of a given page. Its architecture is derived from RT-DETR [16] and re-trained on DocLayNet [13], our popular human-annotated dataset for document-layout analysis, among other proprietary datasets. For inference, our implementation relies on the onnxruntime [5].",
+            "The Docling pipeline feeds page images at 72 dpi resolution, which can be processed on a single CPU with sub-second latency. All predicted bounding-box proposals for document elements are post-processed to remove overlapping proposals based on confidence and size, and then intersected with the text tokens in the PDF to group them into meaningful and complete units such as paragraphs, section titles, list items, captions, figures or tables."
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/52",
+                "type": "text",
+                "text": "Our layout analysis model is an object-detector which predicts the bounding-boxes and classes of various elements on the image of a given page. Its architecture is derived from RT-DETR [16] and re-trained on DocLayNet [13], our popular human-annotated dataset for document-layout analysis, among other proprietary datasets. For inference, our implementation relies on the onnxruntime [5].",
+                "page": 3,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/53",
+                "type": "text",
+                "text": "The Docling pipeline feeds page images at 72 dpi resolution, which can be processed on a single CPU with sub-second latency. All predicted bounding-box proposals for document elements are post-processed to remove overlapping proposals based on confidence and size, and then intersected with the text tokens in the PDF to group them into meaningful and complete units such as paragraphs, section titles, list items, captions, figures or tables.",
+                "page": 3,
+                "children": [],
+                "level": 1
+            }
+        ]
+    },
+    {
+        "title": "Table Structure Recognition",
+        "content": [
+            "The TableFormer model [12], first published in 2022 and since refined with a custom structure token language [9], is a vision-transformer model for table structure recovery. It can predict the logical row and column structure of a given table based on an input image, and determine which table cells belong to column headers, row headers or the table body. Compared to earlier approaches, TableFormer handles many characteristics of tables, such as partial or no borderlines, empty cells, rows or columns, cell spans and hierarchy both on column-heading or row-heading level, tables with inconsistent indentation or alignment and other complexities. For inference, our implementation relies on PyTorch [2].",
+            "The Docling pipeline feeds all table objects detected in the layout analysis to the TableFormer model, by providing an image-crop of the table and the included text cells. TableFormer structure predictions are matched back to the PDF cells in post-processing to avoid expensive re-transcription text in the table image. Typical tables require between 2 and 6 seconds to be processed on a standard CPU, strongly depending on the amount of included table cells."
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/55",
+                "type": "text",
+                "text": "The TableFormer model [12], first published in 2022 and since refined with a custom structure token language [9], is a vision-transformer model for table structure recovery. It can predict the logical row and column structure of a given table based on an input image, and determine which table cells belong to column headers, row headers or the table body. Compared to earlier approaches, TableFormer handles many characteristics of tables, such as partial or no borderlines, empty cells, rows or columns, cell spans and hierarchy both on column-heading or row-heading level, tables with inconsistent indentation or alignment and other complexities. For inference, our implementation relies on PyTorch [2].",
+                "page": 3,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/57",
+                "type": "text",
+                "text": "The Docling pipeline feeds all table objects detected in the layout analysis to the TableFormer model, by providing an image-crop of the table and the included text cells. TableFormer structure predictions are matched back to the PDF cells in post-processing to avoid expensive re-transcription text in the table image. Typical tables require between 2 and 6 seconds to be processed on a standard CPU, strongly depending on the amount of included table cells.",
+                "page": 4,
+                "children": [],
+                "level": 1
+            }
+        ]
+    },
+    {
+        "title": "OCR",
+        "content": [
+            "Docling provides optional support for OCR, for example to cover scanned PDFs or content in bitmaps images embedded on a page. In our initial release, we rely on EasyOCR [1], a popular thirdparty OCR library with support for many languages. Docling, by default, feeds a high-resolution page image (216 dpi) to the OCR engine, to allow capturing small print detail in decent quality. While EasyOCR delivers reasonable transcription quality, we observe that it runs fairly slow on CPU (upwards of 30 seconds per page).",
+            "We are actively seeking collaboration from the open-source community to extend Docling with additional OCR backends and speed improvements."
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/59",
+                "type": "text",
+                "text": "Docling provides optional support for OCR, for example to cover scanned PDFs or content in bitmaps images embedded on a page. In our initial release, we rely on EasyOCR [1], a popular thirdparty OCR library with support for many languages. Docling, by default, feeds a high-resolution page image (216 dpi) to the OCR engine, to allow capturing small print detail in decent quality. While EasyOCR delivers reasonable transcription quality, we observe that it runs fairly slow on CPU (upwards of 30 seconds per page).",
+                "page": 4,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/60",
+                "type": "text",
+                "text": "We are actively seeking collaboration from the open-source community to extend Docling with additional OCR backends and speed improvements.",
+                "page": 4,
+                "children": [],
+                "level": 1
+            }
+        ]
+    },
+    {
+        "title": "3.3 Assembly",
+        "content": [
+            "In the final pipeline stage, Docling assembles all prediction results produced on each page into a well-defined datatype that encapsulates a converted document, as defined in the auxiliary package docling-core . The generated document object is passed through a post-processing model which leverages several algorithms to augment features, such as detection of the document language, correcting the reading order, matching figures with captions and labelling metadata such as title, authors and references. The final output can then be serialized to JSON or transformed into a Markdown representation at the users request."
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/62",
+                "type": "text",
+                "text": "In the final pipeline stage, Docling assembles all prediction results produced on each page into a well-defined datatype that encapsulates a converted document, as defined in the auxiliary package docling-core . The generated document object is passed through a post-processing model which leverages several algorithms to augment features, such as detection of the document language, correcting the reading order, matching figures with captions and labelling metadata such as title, authors and references. The final output can then be serialized to JSON or transformed into a Markdown representation at the users request.",
+                "page": 4,
+                "children": [],
+                "level": 1
+            }
+        ]
+    },
+    {
+        "title": "3.4 Extensibility",
+        "content": [
+            "Docling provides a straight-forward interface to extend its capabilities, namely the model pipeline. A model pipeline constitutes the central part in the processing, following initial document parsing and preceding output assembly, and can be fully customized by sub-classing from an abstract baseclass ( BaseModelPipeline ) or cloning the default model pipeline. This effectively allows to fully customize the chain of models, add or replace models, and introduce additional pipeline configuration parameters. To use a custom model pipeline, the custom pipeline class to instantiate can be provided as an argument to the main document conversion methods. We invite everyone in the community to propose additional or alternative models and improvements.",
+            "Implementations of model classes must satisfy the python Callable interface. The __call__ method must accept an iterator over page objects, and produce another iterator over the page objects which were augmented with the additional features predicted by the model, by extending the provided PagePredictions data model accordingly."
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/64",
+                "type": "text",
+                "text": "Docling provides a straight-forward interface to extend its capabilities, namely the model pipeline. A model pipeline constitutes the central part in the processing, following initial document parsing and preceding output assembly, and can be fully customized by sub-classing from an abstract baseclass ( BaseModelPipeline ) or cloning the default model pipeline. This effectively allows to fully customize the chain of models, add or replace models, and introduce additional pipeline configuration parameters. To use a custom model pipeline, the custom pipeline class to instantiate can be provided as an argument to the main document conversion methods. We invite everyone in the community to propose additional or alternative models and improvements.",
+                "page": 4,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/65",
+                "type": "text",
+                "text": "Implementations of model classes must satisfy the python Callable interface. The __call__ method must accept an iterator over page objects, and produce another iterator over the page objects which were augmented with the additional features predicted by the model, by extending the provided PagePredictions data model accordingly.",
+                "page": 4,
+                "children": [],
+                "level": 1
+            }
+        ]
+    },
+    {
+        "title": "4 Performance",
+        "content": [
+            "In this section, we establish some reference numbers for the processing speed of Docling and the resource budget it requires. All tests in this section are run with default options on our standard test set distributed with Docling, which consists of three papers from arXiv and two IBM Redbooks, with a total of 225 pages. Measurements were taken using both available PDF backends on two different hardware systems: one MacBook Pro M3 Max, and one bare-metal server running Ubuntu 20.04 LTS on an Intel Xeon E5-2690 CPU. For reproducibility, we fixed the thread budget (through setting OMP NUM THREADS environment variable ) once to 4 (Docling default) and once to 16 (equal to full core count on the test hardware). All results are shown in Table 1.",
+            "If you need to run Docling in very low-resource environments, please consider configuring the pypdfium backend. While it is faster and more memory efficient than the default docling-parse backend, it will come at the expense of worse quality results, especially in table structure recovery.",
+            "Establishing GPU acceleration support for the AI models is currently work-in-progress and largely untested, but may work implicitly when CUDA is available and discovered by the onnxruntime and",
+            "torch runtimes backing the Docling pipeline. We will deliver updates on this topic at in a future version of this report."
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/67",
+                "type": "text",
+                "text": "In this section, we establish some reference numbers for the processing speed of Docling and the resource budget it requires. All tests in this section are run with default options on our standard test set distributed with Docling, which consists of three papers from arXiv and two IBM Redbooks, with a total of 225 pages. Measurements were taken using both available PDF backends on two different hardware systems: one MacBook Pro M3 Max, and one bare-metal server running Ubuntu 20.04 LTS on an Intel Xeon E5-2690 CPU. For reproducibility, we fixed the thread budget (through setting OMP NUM THREADS environment variable ) once to 4 (Docling default) and once to 16 (equal to full core count on the test hardware). All results are shown in Table 1.",
+                "page": 4,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/68",
+                "type": "text",
+                "text": "If you need to run Docling in very low-resource environments, please consider configuring the pypdfium backend. While it is faster and more memory efficient than the default docling-parse backend, it will come at the expense of worse quality results, especially in table structure recovery.",
+                "page": 4,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/69",
+                "type": "text",
+                "text": "Establishing GPU acceleration support for the AI models is currently work-in-progress and largely untested, but may work implicitly when CUDA is available and discovered by the onnxruntime and",
+                "page": 4,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/71",
+                "type": "text",
+                "text": "torch runtimes backing the Docling pipeline. We will deliver updates on this topic at in a future version of this report.",
+                "page": 5,
+                "children": [],
+                "level": 1
+            }
+        ]
+    },
+    {
+        "title": "5 Applications",
+        "content": [
+            "Thanks to the high-quality, richly structured document conversion achieved by Docling, its output qualifies for numerous downstream applications. For example, Docling can provide a base for detailed enterprise document search, passage retrieval or classification use-cases, or support knowledge extraction pipelines, allowing specific treatment of different structures in the document, such as tables, figures, section structure or references. For popular generative AI application patterns, such as retrieval-augmented generation (RAG), we provide quackling , an open-source package which capitalizes on Docling's feature-rich document output to enable document-native optimized vector embedding and chunking. It plugs in seamlessly with LLM frameworks such as LlamaIndex [8]. Since Docling is fast, stable and cheap to run, it also makes for an excellent choice to build document-derived datasets. With its powerful table structure recognition, it provides significant benefit to automated knowledge-base construction [11, 10]. Docling is also integrated within the open IBM data prep kit [6], which implements scalable data transforms to build large-scale multi-modal training datasets."
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/74",
+                "type": "text",
+                "text": "Thanks to the high-quality, richly structured document conversion achieved by Docling, its output qualifies for numerous downstream applications. For example, Docling can provide a base for detailed enterprise document search, passage retrieval or classification use-cases, or support knowledge extraction pipelines, allowing specific treatment of different structures in the document, such as tables, figures, section structure or references. For popular generative AI application patterns, such as retrieval-augmented generation (RAG), we provide quackling , an open-source package which capitalizes on Docling's feature-rich document output to enable document-native optimized vector embedding and chunking. It plugs in seamlessly with LLM frameworks such as LlamaIndex [8]. Since Docling is fast, stable and cheap to run, it also makes for an excellent choice to build document-derived datasets. With its powerful table structure recognition, it provides significant benefit to automated knowledge-base construction [11, 10]. Docling is also integrated within the open IBM data prep kit [6], which implements scalable data transforms to build large-scale multi-modal training datasets.",
+                "page": 5,
+                "children": [],
+                "level": 1
+            }
+        ]
+    },
+    {
+        "title": "6 Future work and contributions",
+        "content": [
+            "Docling is designed to allow easy extension of the model library and pipelines. In the future, we plan to extend Docling with several more models, such as a figure-classifier model, an equationrecognition model, a code-recognition model and more. This will help improve the quality of conversion for specific types of content, as well as augment extracted document metadata with additional information. Further investment into testing and optimizing GPU acceleration as well as improving the Docling-native PDF backend are on our roadmap, too.",
+            "We encourage everyone to propose or implement additional features and models, and will gladly take your inputs and contributions under review . The codebase of Docling is open for use and contribution, under the MIT license agreement and in alignment with our contributing guidelines included in the Docling repository. If you use Docling in your projects, please consider citing this technical report."
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/76",
+                "type": "text",
+                "text": "Docling is designed to allow easy extension of the model library and pipelines. In the future, we plan to extend Docling with several more models, such as a figure-classifier model, an equationrecognition model, a code-recognition model and more. This will help improve the quality of conversion for specific types of content, as well as augment extracted document metadata with additional information. Further investment into testing and optimizing GPU acceleration as well as improving the Docling-native PDF backend are on our roadmap, too.",
+                "page": 5,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/77",
+                "type": "text",
+                "text": "We encourage everyone to propose or implement additional features and models, and will gladly take your inputs and contributions under review . The codebase of Docling is open for use and contribution, under the MIT license agreement and in alignment with our contributing guidelines included in the Docling repository. If you use Docling in your projects, please consider citing this technical report.",
+                "page": 5,
+                "children": [],
+                "level": 1
+            }
+        ]
+    },
+    {
+        "title": "References",
+        "content": [
+            "machine learning through dynamic python bytecode transformation and graph compilation. In Proceedings of the 29th ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 2 (ASPLOS '24) . ACM, 4 2024. doi: 10.1145/3620665.3640366. URL https://pytorch.org/assets/pytorch2-2.pdf ."
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/82",
+                "type": "text",
+                "text": "machine learning through dynamic python bytecode transformation and graph compilation. In Proceedings of the 29th ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 2 (ASPLOS '24) . ACM, 4 2024. doi: 10.1145/3620665.3640366. URL https://pytorch.org/assets/pytorch2-2.pdf .",
+                "page": 6,
+                "children": [
+                    {
+                        "id": "#/texts/83",
+                        "type": "list_item",
+                        "text": "C. Auer, M. Dolfi, A. Carvalho, C. B. Ramis, and P. W. Staar. Delivering document conversion as a cloud service with high throughput and responsiveness. In 2022 IEEE 15th International Conference on Cloud Computing (CLOUD) , pages 363-373. IEEE, 2022.",
+                        "page": 6,
+                        "children": [],
+                        "level": 2
+                    },
+                    {
+                        "id": "#/texts/84",
+                        "type": "list_item",
+                        "text": "J. Berkenbilt. Qpdf: A content-preserving pdf document transformer, 2024. URL https: //github.com/qpdf/qpdf .",
+                        "page": 6,
+                        "children": [],
+                        "level": 2
+                    },
+                    {
+                        "id": "#/texts/85",
+                        "type": "list_item",
+                        "text": "O. R. developers. Onnx runtime. https://onnxruntime.ai/ , 2024. Version: 1.18.1.",
+                        "page": 6,
+                        "children": [],
+                        "level": 2
+                    },
+                    {
+                        "id": "#/texts/86",
+                        "type": "list_item",
+                        "text": "IBM. Data Prep Kit: a community project to democratize and accelerate unstructured data preparation for LLM app developers, 2024. URL https://github.com/IBM/ data-prep-kit .",
+                        "page": 6,
+                        "children": [],
+                        "level": 2
+                    },
+                    {
+                        "id": "#/texts/87",
+                        "type": "list_item",
+                        "text": "A. S. Inc. PyMuPDF, 2024. URL https://github.com/pymupdf/PyMuPDF .",
+                        "page": 6,
+                        "children": [],
+                        "level": 2
+                    },
+                    {
+                        "id": "#/texts/88",
+                        "type": "list_item",
+                        "text": "J. Liu. LlamaIndex, 11 2022. URL https://github.com/jerryjliu/llama_index .",
+                        "page": 6,
+                        "children": [],
+                        "level": 2
+                    },
+                    {
+                        "id": "#/texts/89",
+                        "type": "list_item",
+                        "text": "M. Lysak, A. Nassar, N. Livathinos, C. Auer, and P. Staar. Optimized Table Tokenization for Table Structure Recognition. In Document Analysis and Recognition - ICDAR 2023: 17th International Conference, San Jos\u00b4 e, CA, USA, August 21-26, 2023, Proceedings, Part II , pages 37-50, Berlin, Heidelberg, Aug. 2023. Springer-Verlag. ISBN 978-3-031-41678-1. doi: 10. 1007/978-3-031-41679-8 3. URL https://doi.org/10.1007/978-3-031-41679-8_3 .",
+                        "page": 6,
+                        "children": [],
+                        "level": 2
+                    },
+                    {
+                        "id": "#/texts/90",
+                        "type": "list_item",
+                        "text": "L. Mishra, S. Dhibi, Y. Kim, C. Berrospi Ramis, S. Gupta, M. Dolfi, and P. Staar. Statements: Universal information extraction from tables with large language models for ESG KPIs. In D. Stammbach, J. Ni, T. Schimanski, K. Dutia, A. Singh, J. Bingler, C. Christiaen, N. Kushwaha, V. Muccione, S. A. Vaghefi, and M. Leippold, editors, Proceedings of the 1st Workshop on Natural Language Processing Meets Climate Change (ClimateNLP 2024) , pages 193-214, Bangkok, Thailand, Aug. 2024. Association for Computational Linguistics. URL https://aclanthology.org/2024.climatenlp-1.15 .",
+                        "page": 6,
+                        "children": [],
+                        "level": 2
+                    },
+                    {
+                        "id": "#/texts/91",
+                        "type": "list_item",
+                        "text": "L. Morin, V. Weber, G. I. Meijer, F. Yu, and P. W. J. Staar. Patcid: an open-access dataset of chemical structures in patent documents. Nature Communications , 15(1):6532, August 2024. ISSN 2041-1723. doi: 10.1038/s41467-024-50779-y. URL https://doi.org/10.1038/ s41467-024-50779-y .",
+                        "page": 6,
+                        "children": [],
+                        "level": 2
+                    },
+                    {
+                        "id": "#/texts/92",
+                        "type": "list_item",
+                        "text": "A. Nassar, N. Livathinos, M. Lysak, and P. Staar. Tableformer: Table structure understanding with transformers. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 4614-4623, 2022.",
+                        "page": 6,
+                        "children": [],
+                        "level": 2
+                    },
+                    {
+                        "id": "#/texts/93",
+                        "type": "list_item",
+                        "text": "B. Pfitzmann, C. Auer, M. Dolfi, A. S. Nassar, and P. Staar. Doclaynet: a large humanannotated dataset for document-layout segmentation. pages 3743-3751, 2022.",
+                        "page": 6,
+                        "children": [],
+                        "level": 2
+                    },
+                    {
+                        "id": "#/texts/94",
+                        "type": "list_item",
+                        "text": "pypdf Maintainers. pypdf: A Pure-Python PDF Library, 2024. URL https://github.com/ py-pdf/pypdf .",
+                        "page": 6,
+                        "children": [],
+                        "level": 2
+                    },
+                    {
+                        "id": "#/texts/95",
+                        "type": "list_item",
+                        "text": "P. Team. PyPDFium2: Python bindings for PDFium, 2024. URL https://github.com/ pypdfium2-team/pypdfium2 .",
+                        "page": 6,
+                        "children": [],
+                        "level": 2
+                    },
+                    {
+                        "id": "#/texts/96",
+                        "type": "list_item",
+                        "text": "Y. Zhao, W. Lv, S. Xu, J. Wei, G. Wang, Q. Dang, Y. Liu, and J. Chen. Detrs beat yolos on real-time object detection, 2023.",
+                        "page": 6,
+                        "children": [],
+                        "level": 2
+                    }
+                ],
+                "level": 1
+            }
+        ]
+    },
+    {
+        "title": "Appendix",
+        "content": [
+            "In this section, we illustrate a few examples of Docling's output in Markdown and JSON.",
+            "1 INTRODUCTION",
+            "Despite the substantial improvements achieved with machine-learning (ML) approaches and deep neural networks in recent years, document conversion remains a challenging problem, as demonstrated by the numerous public competitions held on this topic [1-4]. The challenge originates from the huge variability in PDF documents regarding layout, language and formats (scanned, programmatic or a combination of both). Engineering a single ML model that can be applied on all types of documents and provides high-quality layout segmentation remains to this day extremely challenging [5]. To highlight the variability in document layouts, we show a few example documents from the DocLayNet dataset in Figure 1. Figure 2: Title page of the DocLayNet paper (arxiv.org/pdf/2206.01062) - left PDF, right rendered Markdown. If recognized, metadata such as authors are appearing first under the title. Text content inside figures is currently dropped, the caption is retained and linked to the figure in the JSON representation (not shown).",
+            "KDD '22, August 14-18, 2022, Washington, DC, USA Birgit Pfitzmann, Christoph Auer, Michele Dolfi, Ahmed S. Nassar, and Peter Staar",
+            "to avoid this at any cost in order to have clear, unbiased baseline numbers for human document-layout annotation. Third, we introduced the feature of snapping boxes around text segments to obtain a pixel-accurate annotation and again reduce time and effort. The CCS annotation tool automatically shrinks every user-drawn box to the minimum bounding-box around the enclosed text-cells for all purely text-based segments, which excludes only Table and Picture . For the latter, we instructed annotation staff to minimise inclusion of surrounding whitespace while including all graphical lines. A downside of snapping boxes to enclosed text cells is that some wrongly parsed PDF pages cannot be annotated correctly and need to be skipped. Fourth, we established a way to flag pages as rejected for cases where no valid annotation according to the label guidelines could be achieved. Example cases for this would be PDF pages that render incorrectly or contain layouts that are impossible to capture with non-overlapping rectangles. Such rejected pages are not contained in the final dataset. With all these measures in place, experienced annotation staff managed to annotate a single page in a typical timeframe of 20s to 60s, depending on its complexity."
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/99",
+                "type": "text",
+                "text": "In this section, we illustrate a few examples of Docling's output in Markdown and JSON.",
+                "page": 7,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/595",
+                "type": "text",
+                "text": "1 INTRODUCTION",
+                "page": 7,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/596",
+                "type": "caption",
+                "text": "Despite the substantial improvements achieved with machine-learning (ML) approaches and deep neural networks in recent years, document conversion remains a challenging problem, as demonstrated by the numerous public competitions held on this topic [1-4]. The challenge originates from the huge variability in PDF documents regarding layout, language and formats (scanned, programmatic or a combination of both). Engineering a single ML model that can be applied on all types of documents and provides high-quality layout segmentation remains to this day extremely challenging [5]. To highlight the variability in document layouts, we show a few example documents from the DocLayNet dataset in Figure 1. Figure 2: Title page of the DocLayNet paper (arxiv.org/pdf/2206.01062) - left PDF, right rendered Markdown. If recognized, metadata such as authors are appearing first under the title. Text content inside figures is currently dropped, the caption is retained and linked to the figure in the JSON representation (not shown).",
+                "page": 7,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/598",
+                "type": "text",
+                "text": "KDD '22, August 14-18, 2022, Washington, DC, USA Birgit Pfitzmann, Christoph Auer, Michele Dolfi, Ahmed S. Nassar, and Peter Staar",
+                "page": 8,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/600",
+                "type": "text",
+                "text": "to avoid this at any cost in order to have clear, unbiased baseline numbers for human document-layout annotation. Third, we introduced the feature of snapping boxes around text segments to obtain a pixel-accurate annotation and again reduce time and effort. The CCS annotation tool automatically shrinks every user-drawn box to the minimum bounding-box around the enclosed text-cells for all purely text-based segments, which excludes only Table and Picture . For the latter, we instructed annotation staff to minimise inclusion of surrounding whitespace while including all graphical lines. A downside of snapping boxes to enclosed text cells is that some wrongly parsed PDF pages cannot be annotated correctly and need to be skipped. Fourth, we established a way to flag pages as rejected for cases where no valid annotation according to the label guidelines could be achieved. Example cases for this would be PDF pages that render incorrectly or contain layouts that are impossible to capture with non-overlapping rectangles. Such rejected pages are not contained in the final dataset. With all these measures in place, experienced annotation staff managed to annotate a single page in a typical timeframe of 20s to 60s, depending on its complexity.",
+                "page": 8,
+                "children": [],
+                "level": 1
+            }
+        ]
+    },
+    {
+        "title": "5 EXPERIMENTS",
+        "content": [
+            "The primary goal of DocLayNet is to obtain high-quality ML models capable of accurate document-layout analysis on a wide variety of challenging layouts. As discussed in Section 2, object detection models are currently the easiest to use, due to the standardisation of ground-truth data in COCO format [16] and the availability of general frameworks such as detectron2 [17]. Furthermore, baseline numbers in PubLayNet and DocBank were obtained using standard object detection models such as Mask R-CNN and Faster R-CNN. As such, we will relate to these object detection methods in this",
+            "paper and leave the detailed evaluation of more recent methods mentioned in Section 2 for future work.",
+            "In this section, we will present several aspects related to the performance of object detection models on DocLayNet. Similarly as in PubLayNet, we will evaluate the quality of their predictions using mean average precision (mAP) with 10 overlaps that range from 0.5 to 0.95 in steps of 0.05 (mAP@0.5-0.95). These scores are computed by leveraging the evaluation code provided by the COCO API [16]."
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/602",
+                "type": "text",
+                "text": "The primary goal of DocLayNet is to obtain high-quality ML models capable of accurate document-layout analysis on a wide variety of challenging layouts. As discussed in Section 2, object detection models are currently the easiest to use, due to the standardisation of ground-truth data in COCO format [16] and the availability of general frameworks such as detectron2 [17]. Furthermore, baseline numbers in PubLayNet and DocBank were obtained using standard object detection models such as Mask R-CNN and Faster R-CNN. As such, we will relate to these object detection methods in this",
+                "page": 8,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/604",
+                "type": "text",
+                "text": "paper and leave the detailed evaluation of more recent methods mentioned in Section 2 for future work.",
+                "page": 8,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/605",
+                "type": "text",
+                "text": "In this section, we will present several aspects related to the performance of object detection models on DocLayNet. Similarly as in PubLayNet, we will evaluate the quality of their predictions using mean average precision (mAP) with 10 overlaps that range from 0.5 to 0.95 in steps of 0.05 (mAP@0.5-0.95). These scores are computed by leveraging the evaluation code provided by the COCO API [16].",
+                "page": 8,
+                "children": [],
+                "level": 1
+            }
+        ]
+    },
+    {
+        "title": "Baselines for Object Detection",
+        "content": [
+            "In Table 2, we present baseline experiments (given in mAP) on Mask R-CNN [12], Faster R-CNN [11], and YOLOv5 [13]. Both training and evaluation were performed on RGB images with dimensions of 1025 \u00d7 1025 pixels. For training, we only used one annotation in case of redundantly annotated pages. As one can observe, the variation in mAP between the models is rather low, but overall between 6 and 10% lower than the mAP computed from the pairwise human annotations on triple-annotated pages. This gives a good indication that the DocLayNet dataset poses a worthwhile challenge for the research community to close the gap between human recognition and ML approaches. It is interesting to see that Mask R-CNN and Faster R-CNN produce very comparable mAP scores, indicating that pixel-based image segmentation derived from bounding-boxes does not help to obtain better predictions. On the other hand, the more recent Yolov5x model does very well and even out-performs humans on selected labels such as Text , Table and Picture . This is not entirely surprising, as Text , Table and Picture are abundant and the most visually distinctive in a document.",
+            "Table 2: Prediction perlormance (mAP@0.5-0.95) of object detection networks on DocLayNet test set. The MRCNN (Mask R-CNN) and FRCNN (Faster R-CNN) models with ResNet-50 or ResNet-101 beckbone were rained based on the network architecturesfrom the detectron2 model zoo (Mask R-CNN R50, R101-FPN 3x, Faster R-CNN R101-FPN 3x), with default configurations. The YOLO implementation utized was YOLOv5x6 [13]. All models were initialised using pre-trained weightsfrom the COCO 2017 dataset.",
+            "to avoid this at any cost in order to have clear, unbiased baseline numbers for human dcument-layout annotation. hird, we introduced the feature of snapping boxes around text segments to obtain a pixel-accurate annotation and again reduce time and effort. The CCS -pxa fjeund je o sjoo-xe posopu oug punoe xoq-upunoq wnwu o o xoq umep-jesnne syuus fgeogewone joo uogeqouue based segments, which excludes only Table and Picture For the later, we instructed annotation staff to minimise inclusion of surrounding whitespace while including all graphical lines. A downside of snapping boxes to enclosed text cellsis that some wrongly parsed PDF pages cannot be annotated correctly and need to be skipped. Fourth, we established a way to flag pages as rejected for cases where no valid annotation according to the label guidelines could be achieved. Example cases for this would be PDF pages that render incorrectly or contain layouts that are impossible to capture with non-overlapping rectangles. Such rejected pages are not contained in the final dataset. With all these measures in place, experienced annotation staff managed to annotate a single page in a typical timeframe of 20s to 60s, depending on its complexity."
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/607",
+                "type": "text",
+                "text": "In Table 2, we present baseline experiments (given in mAP) on Mask R-CNN [12], Faster R-CNN [11], and YOLOv5 [13]. Both training and evaluation were performed on RGB images with dimensions of 1025 \u00d7 1025 pixels. For training, we only used one annotation in case of redundantly annotated pages. As one can observe, the variation in mAP between the models is rather low, but overall between 6 and 10% lower than the mAP computed from the pairwise human annotations on triple-annotated pages. This gives a good indication that the DocLayNet dataset poses a worthwhile challenge for the research community to close the gap between human recognition and ML approaches. It is interesting to see that Mask R-CNN and Faster R-CNN produce very comparable mAP scores, indicating that pixel-based image segmentation derived from bounding-boxes does not help to obtain better predictions. On the other hand, the more recent Yolov5x model does very well and even out-performs humans on selected labels such as Text , Table and Picture . This is not entirely surprising, as Text , Table and Picture are abundant and the most visually distinctive in a document.",
+                "page": 8,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/608",
+                "type": "text",
+                "text": "Table 2: Prediction perlormance (mAP@0.5-0.95) of object detection networks on DocLayNet test set. The MRCNN (Mask R-CNN) and FRCNN (Faster R-CNN) models with ResNet-50 or ResNet-101 beckbone were rained based on the network architecturesfrom the detectron2 model zoo (Mask R-CNN R50, R101-FPN 3x, Faster R-CNN R101-FPN 3x), with default configurations. The YOLO implementation utized was YOLOv5x6 [13]. All models were initialised using pre-trained weightsfrom the COCO 2017 dataset.",
+                "page": 8,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/609",
+                "type": "text",
+                "text": "to avoid this at any cost in order to have clear, unbiased baseline numbers for human dcument-layout annotation. hird, we introduced the feature of snapping boxes around text segments to obtain a pixel-accurate annotation and again reduce time and effort. The CCS -pxa fjeund je o sjoo-xe posopu oug punoe xoq-upunoq wnwu o o xoq umep-jesnne syuus fgeogewone joo uogeqouue based segments, which excludes only Table and Picture For the later, we instructed annotation staff to minimise inclusion of surrounding whitespace while including all graphical lines. A downside of snapping boxes to enclosed text cellsis that some wrongly parsed PDF pages cannot be annotated correctly and need to be skipped. Fourth, we established a way to flag pages as rejected for cases where no valid annotation according to the label guidelines could be achieved. Example cases for this would be PDF pages that render incorrectly or contain layouts that are impossible to capture with non-overlapping rectangles. Such rejected pages are not contained in the final dataset. With all these measures in place, experienced annotation staff managed to annotate a single page in a typical timeframe of 20s to 60s, depending on its complexity.",
+                "page": 8,
+                "children": [],
+                "level": 1
+            }
+        ]
+    },
+    {
+        "title": "5EXPERIMENTS",
+        "content": [
+            "The primary goal of DocLayNet is to obtain high-quality ML models capable of accurate document-layout analysis on a wide variety of challenging layouts. As discussed in Section 2, object detection models are currently the easiest to use, due to the standardisation of ground-truth data in COCO format [16] and the availability of general frameworks such as detectron2 [17]. Furthemore, baseline numbers in PubLayNet and DocBank were obtained using standard object detection models such as Mask R-CNN and Faster R-CNN. As such, we will relate to these object detection methods in this",
+            "Figure 5: Prediction performance (mAP@0.5-0.95) of a Mask R-CNN network with ResNet50 backbone trained on increasing fractions of the DocLayNet dataset. The leaming curve flattens around the 80% mark, indicating that increasing the size of the DocLayNet dataset with simlar data ill not yield significantly better predictions.",
+            "paper and leave the detaled evaluation of more reoent methods mentioned in Section 2 for future work.",
+            "In this section, we will present several aspects related to the performance of object detection models on DocLayNet. Similarly as in 0 S'0 wo ofue pu sde\u03bcano o  (dvw) uospeud oene ueu Susn suogoped e po Agenb u aenje m om oeqnd 0.95 in steps of 0.05 (mAP@0.5-0.95). These scores are computed by leveraging the evaluation code provided by the COCO API[16]"
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/611",
+                "type": "text",
+                "text": "The primary goal of DocLayNet is to obtain high-quality ML models capable of accurate document-layout analysis on a wide variety of challenging layouts. As discussed in Section 2, object detection models are currently the easiest to use, due to the standardisation of ground-truth data in COCO format [16] and the availability of general frameworks such as detectron2 [17]. Furthemore, baseline numbers in PubLayNet and DocBank were obtained using standard object detection models such as Mask R-CNN and Faster R-CNN. As such, we will relate to these object detection methods in this",
+                "page": 8,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/612",
+                "type": "text",
+                "text": "Figure 5: Prediction performance (mAP@0.5-0.95) of a Mask R-CNN network with ResNet50 backbone trained on increasing fractions of the DocLayNet dataset. The leaming curve flattens around the 80% mark, indicating that increasing the size of the DocLayNet dataset with simlar data ill not yield significantly better predictions.",
+                "page": 8,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/613",
+                "type": "text",
+                "text": "paper and leave the detaled evaluation of more reoent methods mentioned in Section 2 for future work.",
+                "page": 8,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/614",
+                "type": "text",
+                "text": "In this section, we will present several aspects related to the performance of object detection models on DocLayNet. Similarly as in 0 S'0 wo ofue pu sde\u03bcano o  (dvw) uospeud oene ueu Susn suogoped e po Agenb u aenje m om oeqnd 0.95 in steps of 0.05 (mAP@0.5-0.95). These scores are computed by leveraging the evaluation code provided by the COCO API[16]",
+                "page": 8,
+                "children": [],
+                "level": 1
+            }
+        ]
+    },
+    {
+        "title": "BaselinesforObjectDetection",
+        "content": [
+            "In Table 2, we present baseline experiments (given in mAP) on Mask R-CNN [12], Faster R-CNN [11], and YOLOv5 [13]. Both training and evaluation were performed on RGB images with dimensions of 1025 \u00d7 1025 pbxels. For training, we only used one annotation in case of redundantly annotated pages. As one can observe, the variation in mAP between the models is rather low, but overallbetween 6 and 0 eug uogeopu poo6 e senj6 sL sobed popeoue-edj\u03bc uo suogegoue ueunq esujed oug wo. pnduoo dvw oug ueg emo %01 DocLayNet dataset poses a worthwhile challenge for the research community to close the gap between human recognition and ML approaches. It is interesting to see that Mask R-CNN and Faster R-CNN produce very comparable mAP scores, indicating that pixelupoau auou ou puey saugo au uo suogopeud sogeq ueqo o djou lou sep soxoq-ugpunoq wou panuap uogeuoubes oteu poseq Yolov5x model does very welland even out-performs humans on selected labels such as Text, Table and Picture  Thisis not entirely surprising, as Text , Table and Picture are abundant and the most visually distinctive in a document.",
+            "Figure 3: Page 6 of the DocLayNet paper. If recognized, metadata such as authors are appearing first under the title. Elements recognized as page headers or footers are suppressed in Markdown to deliver uninterrupted content in reading order. Tables are inserted in reading order. The paragraph in '5. Experiments' wrapping over the column end is broken up in two and interrupted by the table.",
+            "KDD '22, August 14-18, 2022, Washington, DC, USA",
+            "Birgit Pfitzmann, Christoph Auer, Michele Dolfi, Ahmed S. Nassar, and Peter Staar",
+            "Table 1: DocLayNet dataset overview. Along with the frequency of each class label, we present the relative occurrence (as %",
+            "of row 'Total') in the train, test and validation sets. The inter-annotator agreement is computed as the mAP@0.5-0.95 metric we distributed the annotation workload and performed continuous",
+            "only. For phases three and four, a group of 40 dedicated annotators quality controls. Phase one and two required a small team of experts",
+            "were assembled and supervised.",
+            "while coverage ensures that all meaningful items on a page can to a document category, such as",
+            "be annotated. We refrained from class labels that are very specific",
+            "Abstract in the",
+            "Scientific Articles semantics of the text. Labels such as",
+            "category. We also avoided class labels that are tightly linked to the",
+            "Author",
+            "Affiliation",
+            "teria for documents were described in Section 3. A large effort went into ensuring that all documents are free to use. The data sources in DocBank, are often only distinguishable by discriminating on 3 https://arxiv.org/ Figure 4: Table 1 from the DocLayNet paper in the original PDF (A), as rendered Markdown (B) and in JSON representation (C). Spanning table cells, such as the multi-column header 'triple interannotator mAP@0.5-0.95 (%)', is repeated for each column in the Markdown representation (B), which guarantees that every data point can be traced back to row and column headings only by its grid coordinates in the table. In the JSON representation, the span information is reflected in the fields of each table cell (C).",
+            "and",
+            ", as seen",
+            "Phase 1: Data selection and preparation.",
+            "Our inclusion cri-"
+        ],
+        "nodes": [
+            {
+                "id": "#/texts/616",
+                "type": "text",
+                "text": "In Table 2, we present baseline experiments (given in mAP) on Mask R-CNN [12], Faster R-CNN [11], and YOLOv5 [13]. Both training and evaluation were performed on RGB images with dimensions of 1025 \u00d7 1025 pbxels. For training, we only used one annotation in case of redundantly annotated pages. As one can observe, the variation in mAP between the models is rather low, but overallbetween 6 and 0 eug uogeopu poo6 e senj6 sL sobed popeoue-edj\u03bc uo suogegoue ueunq esujed oug wo. pnduoo dvw oug ueg emo %01 DocLayNet dataset poses a worthwhile challenge for the research community to close the gap between human recognition and ML approaches. It is interesting to see that Mask R-CNN and Faster R-CNN produce very comparable mAP scores, indicating that pixelupoau auou ou puey saugo au uo suogopeud sogeq ueqo o djou lou sep soxoq-ugpunoq wou panuap uogeuoubes oteu poseq Yolov5x model does very welland even out-performs humans on selected labels such as Text, Table and Picture  Thisis not entirely surprising, as Text , Table and Picture are abundant and the most visually distinctive in a document.",
+                "page": 8,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/617",
+                "type": "caption",
+                "text": "Figure 3: Page 6 of the DocLayNet paper. If recognized, metadata such as authors are appearing first under the title. Elements recognized as page headers or footers are suppressed in Markdown to deliver uninterrupted content in reading order. Tables are inserted in reading order. The paragraph in '5. Experiments' wrapping over the column end is broken up in two and interrupted by the table.",
+                "page": 8,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/619",
+                "type": "text",
+                "text": "KDD '22, August 14-18, 2022, Washington, DC, USA",
+                "page": 9,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/620",
+                "type": "text",
+                "text": "Birgit Pfitzmann, Christoph Auer, Michele Dolfi, Ahmed S. Nassar, and Peter Staar",
+                "page": 9,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/621",
+                "type": "text",
+                "text": "Table 1: DocLayNet dataset overview. Along with the frequency of each class label, we present the relative occurrence (as %",
+                "page": 9,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/1086",
+                "type": "text",
+                "text": "of row 'Total') in the train, test and validation sets. The inter-annotator agreement is computed as the mAP@0.5-0.95 metric we distributed the annotation workload and performed continuous",
+                "page": 9,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/1087",
+                "type": "text",
+                "text": "only. For phases three and four, a group of 40 dedicated annotators quality controls. Phase one and two required a small team of experts",
+                "page": 9,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/1088",
+                "type": "text",
+                "text": "were assembled and supervised.",
+                "page": 9,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/1089",
+                "type": "text",
+                "text": "while coverage ensures that all meaningful items on a page can to a document category, such as",
+                "page": 9,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/1090",
+                "type": "text",
+                "text": "be annotated. We refrained from class labels that are very specific",
+                "page": 9,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/1091",
+                "type": "text",
+                "text": "Abstract in the",
+                "page": 9,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/1092",
+                "type": "text",
+                "text": "Scientific Articles semantics of the text. Labels such as",
+                "page": 9,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/1093",
+                "type": "text",
+                "text": "category. We also avoided class labels that are tightly linked to the",
+                "page": 9,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/1094",
+                "type": "text",
+                "text": "Author",
+                "page": 9,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/1095",
+                "type": "text",
+                "text": "Affiliation",
+                "page": 9,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/1096",
+                "type": "caption",
+                "text": "teria for documents were described in Section 3. A large effort went into ensuring that all documents are free to use. The data sources in DocBank, are often only distinguishable by discriminating on 3 https://arxiv.org/ Figure 4: Table 1 from the DocLayNet paper in the original PDF (A), as rendered Markdown (B) and in JSON representation (C). Spanning table cells, such as the multi-column header 'triple interannotator mAP@0.5-0.95 (%)', is repeated for each column in the Markdown representation (B), which guarantees that every data point can be traced back to row and column headings only by its grid coordinates in the table. In the JSON representation, the span information is reflected in the fields of each table cell (C).",
+                "page": 9,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/1097",
+                "type": "text",
+                "text": "and",
+                "page": 9,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/1098",
+                "type": "text",
+                "text": ", as seen",
+                "page": 9,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/1099",
+                "type": "text",
+                "text": "Phase 1: Data selection and preparation.",
+                "page": 9,
+                "children": [],
+                "level": 1
+            },
+            {
+                "id": "#/texts/1100",
+                "type": "text",
+                "text": "Our inclusion cri-",
+                "page": 9,
+                "children": [],
+                "level": 1
+            }
+        ]
+    }
+]
