@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# Environment variables
+.env
+.env.*  # optional, if you have multiple env files
+
+# Docker Compose
+docker-compose.yml
+docker-compose.override.yml
+
+# Logs
+*.log
+
+# IDE / Editor files (optional)
+.vscode/
+.idea/
+*.swp
+
+#Parsed Pdfs/PDFs 
+docs.txt
+docs.json
+output.md
+*.pdf
