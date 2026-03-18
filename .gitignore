@@ -30,3 +30,6 @@ docs.txt
 docs.json
 output.md
 *.pdf
+
+#saved Files
+/saved
