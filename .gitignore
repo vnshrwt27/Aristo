@@ -1,35 +1,34 @@
-# Python
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
+*$py.class
 
-# Virtual Environment
+# Virtual environments
 venv/
-env/
 .venv/
+env/
 
 # Environment variables
 .env
-.env.*  # optional, if you have multiple env files
 
-# Docker Compose
-docker-compose.yml
-docker-compose.override.yml
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
 
 # Logs
 *.log
 
-# IDE / Editor files (optional)
-.vscode/
-.idea/
-*.swp
-
-#Parsed Pdfs/PDFs 
+# PDFs and parsed output
+*.pdf
 docs.txt
 docs.json
 output.md
-*.pdf
 
-#saved Files
+# Saved outputs
 saved/
+
+# OS
+.DS_Store
+Thumbs.db
